@@ -150,6 +150,18 @@ public class GridData
         PlacementData data = placedObjects[gridPosition];
         return data.ID;
     }
+
+    internal Vector3Int GetPlacementDataStartPos(Vector3Int gridPosition)
+    {
+        PlacementData data = placedObjects[gridPosition];
+        return data.StartPos;
+    }
+
+    internal Vector3Int GetPlacementDataEndPos(Vector3Int gridPosition)
+    {
+        PlacementData data = placedObjects[gridPosition];
+        return data.EndPos;
+    }
     
 }
 

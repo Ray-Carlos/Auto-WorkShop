@@ -8,8 +8,36 @@ using UnityEngine;
 
 public class AStar : MonoBehaviour
 {
-    public void FindAllRoad(int[,,] map, int[] num)
+    public List<TimeTable> FindAllRoad(GridData gridData)
     {
+        int[,,] map = gridData.map;
+
+        List<Vector2Int> list0End = new List<Vector2Int>();
+        List<Vector2Int> list1End = new List<Vector2Int>();
+        List<Vector2Int> list2End = new List<Vector2Int>();
+        List<TimeTable> timeTables = new List<TimeTable>();
+
+        int row = map.GetLength(0);
+        int col = map.GetLength(1);
+        for (int i = 1; i < row - 1; i++)
+        {
+            for (int j = 1; j < col - 1; j++)
+            {
+                if(map[i, j, 1] == 0)
+                {
+                    list0End.Add(new Vector2Int(i, j));
+                }
+                else if(map[i, j, 1] == 1)
+                {
+                    list1End.Add(new Vector2Int(i, j));
+                }
+                else if(map[i, j, 1] == 2)
+                {
+                    list2End.Add(new Vector2Int(i, j));
+                }
+            }
+        }
+
         List<Vector2Int> scanList = new List<Vector2Int>
         {
             new Vector2Int(-1, 0),
@@ -17,9 +45,32 @@ public class AStar : MonoBehaviour
             new Vector2Int(0, -1),
             new Vector2Int(0, 1)
         };
-        Vector2Int start = new Vector2Int(1, 1);
-        Vector2Int end = new Vector2Int(1, 1);
-        FindRoad(start, end, scanList, map);
+
+        foreach(var pos0 in list0End)
+        {
+            foreach(var pos1 in list1End)
+            {
+                int startID = gridData.GetPlacementDataID(new Vector3Int(pos0.x, 0, pos0.y));
+                int endID = gridData.GetPlacementDataID(new Vector3Int(pos1.x, 0, pos1.y));
+                Vector3Int startPos1 = gridData.GetPlacementDataStartPos(new Vector3Int(pos1.x, 0, pos1.y));
+                Stack<Node> nodes = FindRoad(pos0, new Vector2Int(startPos1.x, startPos1.z), scanList, map);
+                timeTables.Add(new TimeTable(startID, endID, nodes.Count, nodes));
+            }
+        }
+
+        foreach(var pos1 in list1End)
+        {
+            foreach(var pos2 in list2End)
+            {
+                int startID = gridData.GetPlacementDataID(new Vector3Int(pos1.x, 0, pos1.y));
+                int endID = gridData.GetPlacementDataID(new Vector3Int(pos2.x, 0, pos2.y));
+                Vector3Int startPos2 = gridData.GetPlacementDataStartPos(new Vector3Int(pos2.x, 0, pos2.y));
+                Stack<Node> nodes = FindRoad(pos1, new Vector2Int(startPos2.x, startPos2.z), scanList, map);
+                timeTables.Add(new TimeTable(startID, endID, nodes.Count, nodes));
+            }
+        }
+
+        return timeTables;
     }
 
     public Stack<Node> FindRoad(Vector2Int start, Vector2Int end, List<Vector2Int> scanList, int[,,] map)
@@ -139,4 +190,20 @@ public enum MapSign
     OPEN,
     CLOSE,
     BAN,
+}
+
+public class TimeTable
+{
+    public int Start { get; private set; }
+    public int End { get; private set; }
+    public int Count { get; private set; }
+    public Stack<Node> NodeList { get; private set; }
+
+    public TimeTable(int start, int end, int count, Stack<Node> nodeList)
+    {
+        Start = start;
+        End = end;
+        Count = count;
+        NodeList = nodeList;
+    }
 }

@@ -264,8 +264,8 @@ MonoBehaviour:
   isRunGridMapData: 0
   level: 1
   aStar: {fileID: 582853952}
-  isRunAStar: 0
-  isRunPlacedObjects: 1
+  isRunAStar: 1
+  isRunPlacedObjects: 0
 --- !u!4 &261821793
 Transform:
   m_ObjectHideFlags: 0
