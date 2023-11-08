@@ -14,6 +14,8 @@ public class InputManager : MonoBehaviour
 
     public event Action OnClicked, OnExit;
 
+    // private Vector3 mousePos = new Vector3(5, 0, 5);
+
     private void Update()
     {
         if(Input.GetMouseButtonDown(0))

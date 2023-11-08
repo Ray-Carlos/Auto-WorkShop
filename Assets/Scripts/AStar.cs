@@ -52,9 +52,11 @@ public class AStar : MonoBehaviour
             {
                 int startID = gridData.GetPlacementDataID(new Vector3Int(pos0.x, 0, pos0.y));
                 int endID = gridData.GetPlacementDataID(new Vector3Int(pos1.x, 0, pos1.y));
+                int startIndex = gridData.GetPlacementDataIndex(new Vector3Int(pos0.x, 0, pos0.y));
+                int endIndex = gridData.GetPlacementDataIndex(new Vector3Int(pos1.x, 0, pos1.y));
                 Vector3Int startPos1 = gridData.GetPlacementDataStartPos(new Vector3Int(pos1.x, 0, pos1.y));
                 Stack<Node> nodes = FindRoad(pos0, new Vector2Int(startPos1.x, startPos1.z), scanList, map);
-                timeTables.Add(new TimeTable(startID, endID, nodes.Count, nodes));
+                timeTables.Add(new TimeTable(startID, endID, startIndex, endIndex, pos0, nodes.Count, nodes));
             }
         }
 
@@ -64,9 +66,11 @@ public class AStar : MonoBehaviour
             {
                 int startID = gridData.GetPlacementDataID(new Vector3Int(pos1.x, 0, pos1.y));
                 int endID = gridData.GetPlacementDataID(new Vector3Int(pos2.x, 0, pos2.y));
+                int startIndex = gridData.GetPlacementDataIndex(new Vector3Int(pos1.x, 0, pos1.y));
+                int endIndex = gridData.GetPlacementDataIndex(new Vector3Int(pos2.x, 0, pos2.y));
                 Vector3Int startPos2 = gridData.GetPlacementDataStartPos(new Vector3Int(pos2.x, 0, pos2.y));
                 Stack<Node> nodes = FindRoad(pos1, new Vector2Int(startPos2.x, startPos2.z), scanList, map);
-                timeTables.Add(new TimeTable(startID, endID, nodes.Count, nodes));
+                timeTables.Add(new TimeTable(startID, endID, startIndex, endIndex, pos1, nodes.Count, nodes));
             }
         }
 
@@ -196,13 +200,19 @@ public class TimeTable
 {
     public int Start { get; private set; }
     public int End { get; private set; }
+    public int StartIndex { get; private set; }
+    public int EndIndex { get; private set; }
+    public Vector2Int StartPos { get; private set; }
     public int Count { get; private set; }
     public Stack<Node> NodeList { get; private set; }
 
-    public TimeTable(int start, int end, int count, Stack<Node> nodeList)
+    public TimeTable(int start, int end, int startIndex, int endIndex, Vector2Int startPos, int count, Stack<Node> nodeList)
     {
         Start = start;
         End = end;
+        StartIndex = startIndex;
+        EndIndex = endIndex;
+        StartPos = startPos;
         Count = count;
         NodeList = nodeList;
     }

@@ -151,6 +151,12 @@ public class GridData
         return data.ID;
     }
 
+    internal int GetPlacementDataIndex(Vector3Int gridPosition)
+    {
+        PlacementData data = placedObjects[gridPosition];
+        return data.PlacedObjectIndex;
+    }
+
     internal Vector3Int GetPlacementDataStartPos(Vector3Int gridPosition)
     {
         PlacementData data = placedObjects[gridPosition];

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class DebugSystem : MonoBehaviour
 {
@@ -29,6 +30,9 @@ public class DebugSystem : MonoBehaviour
 
     [SerializeField]
     private bool isRunPlacedObjects;
+
+    [SerializeField]
+    private GameObject aStarParent;
 
     private void Start()
     {
@@ -96,17 +100,13 @@ public class DebugSystem : MonoBehaviour
         }
     }
 
-    private void AStarDebug()
+    public void AStarDebug()
     {
-        foreach (Transform child in parent.transform)
+        foreach (Transform child in aStarParent.transform)
         {
             GameObject.Destroy(child.gameObject);
         }
         Debug.Log("---------------------------------------");
-        foreach (Transform child in parent.transform)
-        {
-            GameObject.Destroy(child.gameObject);
-        }
 
         List<TimeTable> timeTables = aStar.FindAllRoad(placementSystem.machineData);
 
@@ -117,7 +117,7 @@ public class DebugSystem : MonoBehaviour
 
             // 创建新的游戏对象和LineRenderer组件
             GameObject lineObject = new GameObject("Line" + i);
-            lineObject.transform.parent = parent.transform;
+            lineObject.transform.parent = aStarParent.transform;
             LineRenderer lineRenderer = lineObject.AddComponent<LineRenderer>();
 
             // 设置材质和颜色
@@ -131,21 +131,28 @@ public class DebugSystem : MonoBehaviour
 
             Stack<Node> path = nodes.NodeList;
 
-            lineRenderer.positionCount = nodes.Count;
+            lineRenderer.positionCount = nodes.Count+1;
 
             int j = 0;
 
-            Debug.Log($"{nodes.Start}, {nodes.End}, {nodes.Count}");
+            Debug.Log($"{nodes.Start}, {nodes.End}, {nodes.StartIndex}, {nodes.EndIndex}, {nodes.Count}");
+
+            Vector3 startPosition = grid.CellToWorld(new Vector3Int(nodes.StartPos.x, 0, nodes.StartPos.y)) + new Vector3(0.5f, 3, 0.5f);
+            // Debug.Log($"{startPosition.x}, {startPosition.z}");
+
+            lineRenderer.SetPosition(j, startPosition);
 
             foreach(var node in path)
             {
+                j++;
+
                 Vector3 position = grid.CellToWorld(new Vector3Int(node.pos.x, 0,node.pos.y)) + new Vector3(0.5f, 3, 0.5f);
 
                 lineRenderer.SetPosition(j, position);
 
                 // Debug.Log($"{node.pos.x}, {node.pos.y}");
 
-                j++;
+                
             }
 
             

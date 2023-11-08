@@ -21,7 +21,9 @@ public class PlacementSystem : MonoBehaviour
     [SerializeField]
     private PreviewSystem preview;
 
+    // private Vector3Int lastDetectedPosition = new Vector3Int(5, 0, 5);
     private Vector3Int lastDetectedPosition = Vector3Int.zero;
+
 
     [SerializeField]
     private ObjectPlacer objectPlacer;
@@ -35,9 +37,10 @@ public class PlacementSystem : MonoBehaviour
         machineData.InitMap();
         machineData.InitPlacementData();
 
-        Vector3 mousePosition = inputManager.GetSelectedMapPosition();
-        Vector3Int gridPosition = grid.WorldToCell(mousePosition);
-        preview.MoveCursor(grid.CellToWorld(gridPosition));
+        // Vector3 mousePosition = inputManager.GetSelectedMapPosition();
+        // Vector3Int gridPosition = grid.WorldToCell(mousePosition);
+        // preview.MoveCursor(grid.CellToWorld(gridPosition));
+        preview.MoveCursor(grid.CellToWorld(new Vector3Int(5, 0, 5)));
     }
 
     public void StartPlacement(int ID)
