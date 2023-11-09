@@ -37,7 +37,7 @@ public class DebugSystem : MonoBehaviour
     private void Start()
     {
         InvokeRepeating("Repeating1", 0f, 1f);
-        InvokeRepeating("Repeating2", 0f, 5f);
+        InvokeRepeating("Repeating2", 0f, 1f);
     }
 
     private void Repeating1()
