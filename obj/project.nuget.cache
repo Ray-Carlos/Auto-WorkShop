@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "gRJ/ktNSf34EkzUhnjE7V2RO6RCH/I8WSj0eUnkBwqxJju4ruY78jObdX8Hn3Dszz76di84QVFbHQUJnHdhZJA==",
+  "dgSpecHash": "p2b70iXGn40w8Wz07b2dNE/E8RnEqIt0+L1hoMpFtMKovru05E1alnx0O1j6AUDRJ7BRdMk4eBd153zPjTN4dw==",
   "success": true,
-  "projectFilePath": "E:\\Game\\Auto Workshop\\Assembly-CSharp-Editor.csproj",
+  "projectFilePath": "E:\\Game\\Auto Workshop\\Assembly-CSharp.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

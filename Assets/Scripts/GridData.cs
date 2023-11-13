@@ -74,6 +74,7 @@ public class GridData
                 throw new Exception($"Dictionary already contains this cell positiojn {pos}");
             
             placedObjects[pos] = data;
+
             i++;
             if(i == 1)
             {
@@ -89,6 +90,8 @@ public class GridData
             {
                 map[pos.x, pos.z, 2] = placedObjectIndex*1000+ID*10+2;
             }
+
+            
             // Debug.Log($"{positionToOccupy.Count}, {i}, {map[pos.x, pos.z, 0]}");
             // Debug.Log($"{num[0]}, {num[1]}, {num[2]}");
         }
@@ -167,8 +170,7 @@ public class GridData
     {
         PlacementData data = placedObjects[gridPosition];
         return data.EndPos;
-    }
-    
+    }    
 }
 
 
@@ -180,7 +182,6 @@ public class PlacementData
 
     public Vector3Int StartPos { get; private set;}
     public Vector3Int EndPos { get; private set;}
-
 
     public PlacementData(List<Vector3Int> occupiedPositions, int iD, int placedObjectIndex, Vector3Int startPos, Vector3Int endPos)
     {

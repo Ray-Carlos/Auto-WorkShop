@@ -18,6 +18,9 @@ public class PreviewSystem : MonoBehaviour
 
     private Renderer cellIndicatorRenderer;
 
+    [SerializeField]
+    private GameObject parent;
+
     private void Start()
     {
         previewMaterialInstance = new Material(previewMaterialPrefab);
@@ -30,6 +33,7 @@ public class PreviewSystem : MonoBehaviour
     {
         previewObject = Instantiate(prefab);
         previewObject.transform.position = new Vector3Int(5, 0, 5);
+        previewObject.transform.parent = parent.transform;
         PreparePreview(previewObject);
         PrepareCursor(size);
         cellIndicator.SetActive(true);
