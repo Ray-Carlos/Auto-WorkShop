@@ -100,6 +100,7 @@
     <Compile Include="Assets\Scripts\IBuildingState.cs" />
     <Compile Include="Assets\Scripts\ObjectPlacer.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
+    <Compile Include="Assets\Scripts\CameraController.cs" />
     <Compile Include="Assets\Scripts\DebugSystem.cs" />
     <Compile Include="Assets\Scripts\AStar.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextInfoDebugTool.cs" />

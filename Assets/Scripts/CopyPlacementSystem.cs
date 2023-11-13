@@ -104,13 +104,13 @@ public class CopyPlacementSystem : MonoBehaviour
             lineRenderer.positionCount = nodes.Count+1;
 
             int j = 0;
-            Vector3 startPosition = grid.CellToWorld(new Vector3Int(nodes.StartPos.x, 0, nodes.StartPos.y)) + new Vector3(0.5f, 3, 0.5f);
+            Vector3 startPosition = grid.CellToWorld(new Vector3Int(nodes.StartPos.x, 0, nodes.StartPos.y)) + new Vector3(0.5f, 0.8f, 0.5f);
             lineRenderer.SetPosition(j, startPosition);
 
             foreach(var node in path)
             {
                 j++;
-                Vector3 position = grid.CellToWorld(new Vector3Int(node.pos.x, 0,node.pos.y)) + new Vector3(0.5f, 3, 0.5f);
+                Vector3 position = grid.CellToWorld(new Vector3Int(node.pos.x, 0,node.pos.y)) + new Vector3(0.5f, 0.8f, 0.5f);
                 lineRenderer.SetPosition(j, position);
             }
 
