@@ -12,7 +12,7 @@ public class CameraController : MonoBehaviour
     private Vector3 normalViewPosition = new Vector3(6, 10, 6);
     private Quaternion normalViewRotation;
 
-    private Vector3 orbitPosition = new Vector3(18, -8, 6);
+    private Vector3 orbitPosition = new Vector3(22, -8, 6);
     private Quaternion orbitRotation;
     private bool isOrbiting = false;
 
