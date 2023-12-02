@@ -34,6 +34,9 @@ public class DebugSystem : MonoBehaviour
     [SerializeField]
     private GameObject aStarParent;
 
+    [SerializeField]
+    private ScrollRect scrollRect;
+
     private void Start()
     {
         InvokeRepeating("Repeating1", 0f, 1f);
@@ -59,6 +62,11 @@ public class DebugSystem : MonoBehaviour
         {
             AStarDebug();
         }
+    }
+
+    public void PrintScollRect()
+    {
+        Debug.Log($"{scrollRect.normalizedPosition}");
     }
 
 

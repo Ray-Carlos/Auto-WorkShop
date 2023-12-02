@@ -6,10 +6,10 @@ using UnityEngine.EventSystems;
 
 public class ButtonStyle : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
-    public Text buttonText; // 按钮的文字
+    public Text buttonText;
     public RectTransform rectangleTransform;
     public Image image;
-    public float expandTime = 0.1f; // 展开所需的时间
+    public float expandTime = 0.1f;
     private Color normalColor = Color.gray;
     private Color hoverColor = Color.white;
     private Color clickedColor = new Color(0.9568628f, 0.5686275f, 0.1647059f, 1f);
@@ -31,7 +31,7 @@ public class ButtonStyle : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public void OnPointerExit(PointerEventData eventData)
     {
         buttonText.color = normalColor;
-        StartCoroutine(ExpandRectangle(0f, expandTime, hoverColor, normalColor)); // 收缩长方形
+        StartCoroutine(ExpandRectangle(0f, expandTime, hoverColor, normalColor));
     }
 
     public void OnPointerClick(PointerEventData eventData)

@@ -63,7 +63,12 @@ public class PlacementSystem : MonoBehaviour
 
     private void PlaceStructure()
     {
-        if(inputManager.IsPointerOverUI())
+        // if(inputManager.IsPointerOverUI())
+        // {
+        //     return;
+        // }
+        // Debug.Log($"{inputManager.IsPointOverPlane()}");
+        if(!inputManager.IsPointOverPlane())
         {
             return;
         }

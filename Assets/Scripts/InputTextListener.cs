@@ -20,7 +20,6 @@ public class InputTextListener : MonoBehaviour
         }
 
         int.TryParse(inputField.text, out int value);
-        Debug.Log($"{value}");
 
         if (value == 0)
         {
