@@ -8,7 +8,7 @@ public class GridData
 {
     Dictionary<Vector3Int, PlacementData> placedObjects = new();
 
-    public int[,,] map = new int[12, 12, 3];
+    public int[,,] map = new int[12, 12, 4];
 
     public int[] num = new int[3];
 
@@ -29,6 +29,7 @@ public class GridData
                     map[i, j, 0] = -1; // begin ID
                     map[i, j, 1] = -1; // end ID
                     map[i, j, 2] = -1; // occupied 
+                    map[i, j, 3] = -1;
                 }
             }
         }
@@ -80,6 +81,7 @@ public class GridData
             {
                 map[pos.x, pos.z, 0] = ID;
                 map[pos.x, pos.z, 2] = placedObjectIndex*1000+ID*10+0;
+                map[pos.x, pos.z, 3] = placedObjectIndex;
             }
             else if(i == positionToOccupy.Count)
             {
@@ -90,10 +92,6 @@ public class GridData
             {
                 map[pos.x, pos.z, 2] = placedObjectIndex*1000+ID*10+2;
             }
-
-            
-            // Debug.Log($"{positionToOccupy.Count}, {i}, {map[pos.x, pos.z, 0]}");
-            // Debug.Log($"{num[0]}, {num[1]}, {num[2]}");
         }
     }
 
@@ -136,16 +134,14 @@ public class GridData
             i++;
             if(i == 1)
             {
-                // Debug.Log($"{map[pos.x, pos.z, 2]/10%10}");
-
                 num[map[pos.x, pos.z, 2]/10%10]--;
             }
             placedObjects.Remove(pos);
             map[pos.x, pos.z, 0] = -1;
             map[pos.x, pos.z, 1] = -1;
             map[pos.x, pos.z, 2] = -1;
+            map[pos.x, pos.z, 3] = -1;
         }
-        // Debug.Log($"{num[0]}, {num[1]}, {num[2]}");
     }
 
     internal int GetPlacementDataID(Vector3Int gridPosition)

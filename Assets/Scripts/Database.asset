@@ -20,7 +20,7 @@ MonoBehaviour:
       type: 3}
   - <Name>k__BackingField: Conveyor 1x3 B
     <ID>k__BackingField: 1
-    <Size>k__BackingField: {x: 3, y: 1}
+    <Size>k__BackingField: {x: 2, y: 1}
     <Prefab>k__BackingField: {fileID: 362938904276390872, guid: f6587264a7620d849953488e49873554,
       type: 3}
   - <Name>k__BackingField: Conveyor 1x3 R

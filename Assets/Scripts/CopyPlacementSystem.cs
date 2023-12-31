@@ -42,6 +42,8 @@ public class CopyPlacementSystem : MonoBehaviour
     [SerializeField]
     private ScrollRect scrollRect;
 
+    public List<TimeTable> timeTables;
+
     public void CopyPlacement()
     {
         foreach (Transform child in objectParent.transform)
@@ -58,10 +60,8 @@ public class CopyPlacementSystem : MonoBehaviour
                 Vector3Int pos = new Vector3Int(i, 0, j);
                 if (!gridData.CanPlaceObejctAt(pos, new Vector2Int(1, 1)))
                 {
-                    // Debug.Log($"{pos.x}, {pos.z}");
                     if(gridData.GetPlacementDataStartPos(pos) == pos)
                     {
-                        // Debug.Log($"{pos.x}, {pos.z}");
                         objectPlacer.PlaceObject(database.objectsData[gridData.GetPlacementDataID(pos)].Prefab, grid.CellToWorld(pos));
                     }
                 }
@@ -83,10 +83,10 @@ public class CopyPlacementSystem : MonoBehaviour
         {
             scrollRect.normalizedPosition = Vector2.Lerp(startingPosition, targetPosition, (elapsedTime / smoothTime));
             elapsedTime += Time.deltaTime;
-            yield return null; // 等待一帧
+            yield return null;
         }
 
-        scrollRect.normalizedPosition = targetPosition; // 确保最终位置准确
+        scrollRect.normalizedPosition = targetPosition;
     }
 
     public void AStarDisplay()
@@ -105,13 +105,14 @@ public class CopyPlacementSystem : MonoBehaviour
         {
             GameObject.Destroy(child.gameObject);
         }
-        // Debug.Log("---------------------------------------");
 
-        List<TimeTable> timeTables = aStar.FindAllRoad(placementSystem.machineData);
+        timeTables = aStar.FindAllRoad(placementSystem.machineData);
+        
+        int count1 = 0;
+        int count2 = 0;
 
         int i = 0;
         int length = timeTables.Count;
-        // Debug.Log($"{length}");
         foreach(var nodes in timeTables)
         {
             i++;
@@ -139,6 +140,15 @@ public class CopyPlacementSystem : MonoBehaviour
             Vector3 startPosition = grid.CellToWorld(new Vector3Int(nodes.StartPos.x, 0, nodes.StartPos.y)) + new Vector3(0.5f, 0.8f, 0.5f);
             lineRenderer.SetPosition(j, startPosition);
 
+            if(nodes.Start == 0)
+            {
+                count1++;
+            }
+            if(nodes.Start == 1)
+            {
+                count2++;
+            }
+
             foreach(var node in path)
             {
                 j++;
@@ -146,9 +156,7 @@ public class CopyPlacementSystem : MonoBehaviour
                 lineRenderer.SetPosition(j, position);
             }
 
-            // GameObject toggleObj = Instantiate(togglePrefab, new Vector3((i-1) / 8 *200, -((i-1) % 8) *50, 0), Quaternion.identity);
             GameObject toggleObj = Instantiate(togglePrefab, new Vector3((i-1) % 3 *200, -((i-1) / 3) *50, 0), Quaternion.identity);
-            // Debug.Log($"{i}: {(i-1) % 3 *200}, {-((i-1) / 8) *50}");
             if(length > 21)
             {
                 toggleObj.transform.SetParent(toggleParent.transform, false);
@@ -166,7 +174,12 @@ public class CopyPlacementSystem : MonoBehaviour
             }
 
             toggle.onValueChanged.AddListener(delegate { ToggleLine(toggle, lineObject); });
+
         }
+
+        placementSystem.timeTables = timeTables;
+        placementSystem.timeTableCount[0] = count1;
+        placementSystem.timeTableCount[1] = count2;
     }
 
     void ToggleLine(Toggle toggle, GameObject line)

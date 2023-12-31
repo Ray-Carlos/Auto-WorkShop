@@ -18,6 +18,9 @@ public class PlacementSystem : MonoBehaviour
 
     public GridData machineData;
 
+    public List<TimeTable> timeTables;
+    public int[] timeTableCount = new int[2];
+
     [SerializeField]
     private PreviewSystem preview;
 
@@ -63,11 +66,6 @@ public class PlacementSystem : MonoBehaviour
 
     private void PlaceStructure()
     {
-        // if(inputManager.IsPointerOverUI())
-        // {
-        //     return;
-        // }
-        // Debug.Log($"{inputManager.IsPointOverPlane()}");
         if(!inputManager.IsPointOverPlane())
         {
             return;
@@ -75,17 +73,9 @@ public class PlacementSystem : MonoBehaviour
         Vector3 mousePosition = inputManager.GetSelectedMapPosition();
         Vector3Int gridPosition = grid.WorldToCell(mousePosition);
 
-        // Debug.Log(gridPosition);
-
         buildingState.OnAction(gridPosition);
     }
 
-    // private bool CheckPlacementValidity(Vector3Int gridPosition, int selectedObjectIndex)
-    // {
-    //     GridData selectedData = machineData;
-
-    //     return selectedData.CanPlaceObejctAt(gridPosition, database.objectsData[selectedObjectIndex].Size);
-    // }
 
     private void StopPlacement()
     {
