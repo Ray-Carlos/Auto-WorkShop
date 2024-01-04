@@ -116,9 +116,9 @@ public class CopyPlacementSystem : MonoBehaviour
         foreach(var nodes in timeTables)
         {
             i++;
-            Color randomColor = new Color(Random.value, Random.value, Random.value)
+            Color randomColor = new Color(Random.value*0.5f+0.5f, Random.value*0.5f+0.5f, Random.value*0.5f+0.5f)
             {
-                a = 0.8f
+                a = 0.9f
             };
 
             GameObject lineObject = new GameObject("Line" + i);

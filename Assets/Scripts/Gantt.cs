@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 public class Gantt : MonoBehaviour
 {
@@ -14,8 +15,10 @@ public class Gantt : MonoBehaviour
 
     [SerializeField]
     public Transform specifiedPanel;
+    [SerializeField]
+    private Font font;
 
-    public void DrawGantt()
+    public void DrawGantt(double[,] bestptr, int[,] bestper, double blance, int[] equSize)
     {
         foreach (Transform child in specifiedPanel)
         {
@@ -27,6 +30,7 @@ public class Gantt : MonoBehaviour
 
         int row = map.GetLength(0);
         int col = map.GetLength(1);
+        
         for (int i = 1; i < row - 1; i++)
         {
             for (int j = 1; j < col - 1; j++)
@@ -38,36 +42,107 @@ public class Gantt : MonoBehaviour
             }
         }
 
-        int numberOfRectangles = objectIDs.Count;
+        int numberOfRectangles = equSize[0]+equSize[1]+equSize[2];
 
         float panelWidth = specifiedPanel.GetComponent<RectTransform>().rect.width;
         float panelHeight = specifiedPanel.GetComponent<RectTransform>().rect.height;
 
-        float rectangleWidth = panelWidth;
+        float rectangleWidth;
         float rectangleHeight = panelHeight / numberOfRectangles;
 
-        for (int i = 0; i < numberOfRectangles; i++)
+        row = bestptr.GetLength(0);
+        col = bestptr.GetLength(1);
+        double timeSpan = bestptr.Cast<double>().Max();
+
+        for (float i = 10; i<timeSpan; i+=10)
         {
-            GameObject rectangle = Instantiate(rectanglePrefab, specifiedPanel);
-
-            float xPos = panelWidth/2;
-            float yPos = i*rectangleHeight;
-  
-            SetRectangle(rectangle, panelWidth, panelHeight, xPos, yPos, rectangleWidth/2, rectangleHeight);
-
-            Color color = new Color(0.1568628f,0.1568628f,0.1568628f);
-            rectangle.GetComponent<Image>().color = color;
-
-            GameObject rectangle1 = Instantiate(rectanglePrefab, specifiedPanel);
-
-            float xPos1 = panelWidth/2;
-            float yPos1 = i*rectangleHeight;
-  
-            SetRectangle1(rectangle1, panelWidth, panelHeight, xPos1, yPos1, rectangleWidth/2, rectangleHeight);
-
-            Color color1 = new Color(1f,1f,1f);
-            rectangle1.GetComponent<Image>().color = color1;
+            SetRect(panelWidth, panelHeight, (float)(i / timeSpan)*panelWidth, 0, 2, panelHeight, Color.white);
         }
+
+        for (int i = 0; i < row; i++)
+        {
+            Color randomColor = new Color(Random.value*0.5f+0.5f, Random.value*0.5f+0.5f, Random.value*0.5f+0.5f);
+            for (int j = 0; j < 3; j++)
+            {
+                int id = 0;
+                switch(j)
+                {
+                    case 0:
+                        id = bestper[i,j];
+                        break;
+                    case 1:
+                        id = equSize[0] + bestper[i,j];
+                        break;
+                    case 2:
+                        id = equSize[0] + equSize[1] + bestper[i,j];
+                        break;
+                }
+                // GameObject rectangle = new GameObject();
+                rectangleWidth = (float)((bestptr[i,j*3+1]-bestptr[i,j*3])/timeSpan*panelWidth);
+                GameObject rectangle = SetRect(panelWidth, panelHeight, (float)(bestptr[i,j*3]/timeSpan*panelWidth), id*rectangleHeight, rectangleWidth, rectangleHeight*0.7f, randomColor);
+                SetText(rectangle, rectangleWidth, rectangleHeight*0.7f, i.ToString()+" - "+(j+1).ToString());
+                rectangleWidth = (float)((bestptr[i,j*3+2]-bestptr[i,j*3+1])/timeSpan*panelWidth);
+                SetRect(panelWidth, panelHeight, (float)(bestptr[i,j*3+1]/timeSpan*panelWidth), id*rectangleHeight, rectangleWidth, rectangleHeight*0.7f, Color.gray);
+            }
+        }
+
+        GameObject textBoxGO = new GameObject("TextBox");
+        textBoxGO.transform.SetParent(specifiedPanel, false);
+        Text textBox = textBoxGO.AddComponent<Text>();
+        RectTransform rectTransform = textBoxGO.GetComponent<RectTransform>();
+        rectTransform.sizeDelta = new Vector2(300, 100);
+        rectTransform.localPosition = new Vector3(100, 225, 0);
+        textBox.alignment = TextAnchor.MiddleLeft;
+        textBox.text = "加权最小值:"+blance.ToString("F2");
+        textBox.font = font;
+        textBox.fontSize = 32;
+        textBox.color = new Color(1f, 1f, 1f);
+
+        GameObject textBoxGO1 = new GameObject("TextBox");
+        textBoxGO1.transform.SetParent(specifiedPanel, false);
+        Text textBox1 = textBoxGO1.AddComponent<Text>();
+        RectTransform rectTransform1 = textBoxGO1.GetComponent<RectTransform>();
+        rectTransform1.sizeDelta = new Vector2(300, 100);
+        rectTransform1.localPosition = new Vector3(410, 225, 0);
+        textBox1.alignment = TextAnchor.MiddleLeft;
+        textBox1.text = "加工时间:"+timeSpan.ToString("F0")+"h";
+        textBox1.font = font;
+        textBox1.fontSize = 32;
+        textBox1.color = new Color(1f, 1f, 1f);
+    }
+
+    void SetText(GameObject gameObject, float rectangleWidth, float height, string str)
+    {
+        GameObject textBoxGO = new GameObject("TextBox");
+        textBoxGO.transform.SetParent(gameObject.transform, false);
+
+        Text textBox = textBoxGO.AddComponent<Text>();
+        
+        RectTransform rectTransform = textBoxGO.GetComponent<RectTransform>();
+        rectTransform.sizeDelta = new Vector2(100, height);
+        rectTransform.localPosition = new Vector3((100 - rectangleWidth)/2+5, 0, 0f);
+
+        textBox.alignment = TextAnchor.MiddleLeft;
+        
+        textBox.text = str;
+
+        textBox.font = font;
+        textBox.fontSize = 20;
+
+        textBox.color = new Color(0f, 0f, 0f);
+
+        textBox.resizeTextForBestFit = true;
+        textBox.resizeTextMinSize = 5;
+        textBox.resizeTextMaxSize = 20;
+    }
+
+    GameObject SetRect(float panelWidth, float panelHeight, float xPos, float yPos, float width, float height, Color color)
+    {
+
+        GameObject rectangle = Instantiate(rectanglePrefab, specifiedPanel);
+        SetRectangle(rectangle, panelWidth, panelHeight, xPos, yPos, width, height);
+        rectangle.GetComponent<Image>().color = color;
+        return rectangle;
     }
     
     void SetRectangle(GameObject rectangle, float panelWidth, float panelHeight, float xPos, float yPos, float width, float height)
@@ -76,15 +151,6 @@ public class Gantt : MonoBehaviour
 
         float x = -panelWidth/2 + xPos + width/2;
         float y = -panelHeight/2 + yPos + height/2;
-        rectangle.transform.localPosition = new Vector3(x, y, 0f);
-    }
-
-        void SetRectangle1(GameObject rectangle, float panelWidth, float panelHeight, float xPos, float yPos, float width, float height)
-    {
-        rectangle.GetComponent<RectTransform>().sizeDelta = new Vector2(width-3, height-3);
-
-        float x = -panelWidth/2 + xPos + width/2 + 1.5f;
-        float y = -panelHeight/2 + yPos + height/2 + 1.5f;
         rectangle.transform.localPosition = new Vector3(x, y, 0f);
     }
 }
